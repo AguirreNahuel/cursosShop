@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm" style="background-color: #f8fafc; padding: 30px 0;">
+    <div style="width: 100%; padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; max-width: 1140px;">
+
+        <div style="text-align: center;">
+            <!-- Banner limitado en tamaño, centrado y con bordes redondeados elegantes -->
+            <img src="{% static 'images/banners/blackfriday.png' %}" style="max-height: 380px; width: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);">
+        </div>
+
+    </div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+
+<!-- ========================= SECTION  ========================= -->
+<section class="section-name padding-y-sm" style="background-color: #f8fafc; padding-bottom: 50px;">
+    <div style="width: 100%; padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; max-width: 1140px;">
+
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0;">Los cursos más vendidos</h3>
+            <a href="{% url 'store' %}" style="background-color: transparent; border: 1px solid #4f46e5; color: #4f46e5; padding: 8px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#4f46e5'; this.style.color='#fff';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#4f46e5';">Ver Todo</a>
+        </header><!-- sect-heading -->
+
+        <div style="display: flex; flex-wrap: wrap; margin-right: -12px; margin-left: -12px;">
+
+            {% for product in products %}
+            <div style="flex: 0 0 25%; max-width: 25%; padding-right: 12px; padding-left: 12px; margin-bottom: 24px;">
+                <div style="background-color: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); height: 100%; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 15px -3px rgba(0, 0, 0, 0.06)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.02)'">
+                    
+                    <a href="{{ product.get_url }}" style="height: 160px; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid #e2e8f0;"> 
+                        <img src="{{ product.images.url }}" style="max-height: 140px; max-width: 100%; object-fit: contain;"> 
+                    </a>
+                    
+                    <figcaption style="padding: 18px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+                        <div>
+                            <a href="{{ product.get_url }}" style="text-decoration: none; color: #0f172a; font-weight: 600; font-size: 0.95rem; display: block; margin-bottom: 8px; line-height: 1.4;">{{ product.product_name }}</a>
+                            <div style="color: #4f46e5; font-weight: 700; font-size: 1.1rem; margin-bottom: 10px;">${{ product.price }} USD</div> <!-- price-wrap.// -->
+                        </div>
+
+                        <div style="color: #f59e0b; font-size: 0.85rem;">
+                            <span>
+                                <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                            </span>
+                        </div>
+
+                    </figcaption>
+                </div>
+            </div> <!-- col.// -->
+            {% endfor %}
+        </div>
+    </div><!-- container // -->
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y" style="min-height: 84vh; background-color: #f8fafc; padding: 40px 0; display: flex; align-items: center; justify-content: center;">
+    <div style="width: 100%; max-width: 420px; padding: 0 15px; margin: 0 auto;">
+
+        {% if request.GET.command == 'verification' %}
+          <!-- ============================ ALERTA DE VERIFICACIÓN ================================= -->
+          <div class="container" role="alert" style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03);">
+              <div style="display: inline-block; padding: 15px; background-color: #d1fae5; border-radius: 50%; margin-bottom: 15px;">
+                  <i class="fas fa-envelope-open-text" style="font-size: 32px; color: #10b981; display: block;"></i>
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #065f46; margin-bottom: 12px;">¡Verifica tu correo!</h3>
+              <p style="color: #047857; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;">
+                  Gracias por registrarte en <strong>ByteShop</strong>, te hemos enviado un enlace para confirmar tu cuenta a: <br>
+                  <span style="color: #0f172a; font-weight: 600; word-break: break-all;">[{{ request.GET.email }}]</span>
+              </p>
+              <div>
+                  <a href="{% url 'login' %}" style="display: inline-block; background-color: #4f46e5; color: #fff; text-decoration: none; font-weight: 600; padding: 10px 24px; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); transition: all 0.2s;">Entrar a mi cuenta</a>
+              </div>
+          </div>
+
+        {% else %}
+        <!-- ============================ COMPONENT LOGIN ================================= -->
+            <div style="background-color: #fff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -4px rgba(0, 0, 0, 0.03); overflow: hidden;">
+              {% include 'includes/alerts.html' %}
+              <div style="padding: 35px 30px;">
+                  <h4 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 25px; text-align: center;">Iniciar sesión en CursosShop</h4>
+                  
+                  <form action="{% url 'login' %}" method="POST">
+                      {% csrf_token %}
+
+                      <div style="margin-bottom: 20px;">
+                         <input type="email" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; background-color: #f8fafc; color: #0f172a; transition: border-color 0.2s;" placeholder="Correo electrónico" name="email" onfocus="this.style.borderColor='#4f46e5'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc';">
+                      </div> <!-- form-group// -->
+                      
+                      <div style="margin-bottom: 15px;">
+                        <input type="password" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; background-color: #f8fafc; color: #0f172a; transition: border-color 0.2s;" placeholder="Contraseña" name="password" onfocus="this.style.borderColor='#4f46e5'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc';">
+                      </div> <!-- form-group// -->
+
+                      <div style="margin-bottom: 25px; display: flex; justify-content: flex-end;">
+                          <a href="{% url 'forgotPassword' %}" style="color: #4f46e5; text-decoration: none; font-size: 0.85rem; font-weight: 600;">¿Olvidaste tu contraseña?</a>
+                      </div> <!-- form-group form-check .// -->
+
+                      <div>
+                          <button type="submit" style="width: 100%; background-color: #4f46e5; color: #fff; border: none; font-weight: 600; padding: 12px; border-radius: 8px; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#4338ca'" onmouseout="this.style.backgroundColor='#4f46e5'"> Entrar </button>
+                      </div> <!-- form-group// -->
+                  </form>
+              </div> <!-- card-body.// -->
+            </div> <!-- card .// -->
+
+            <p style="text-align: center; margin-top: 25px; color: #64748b; font-size: 0.95rem;">
+                ¿No tienes una cuenta? <a href="{% url 'register' %}" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Regístrate</a>
+            </p>
+        <!-- ============================ COMPONENT LOGIN END.// ================================= -->
+        {% endif %}
+
+    </div>
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

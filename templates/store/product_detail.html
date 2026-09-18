@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section-content padding-y" style="background-color: #f8fafc; padding: 40px 0;">
+  <div style="width: 100%; padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; max-width: 1140px;">
+
+    <!-- ============================ COMPONENT 1 ================================= -->
+    <div style="background-color: #fff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03); overflow: hidden; margin-bottom: 30px;">
+      <div style="display: flex; flex-wrap: wrap;">
+        
+        <aside style="flex: 0 0 50%; max-width: 50%; padding: 30px;">
+          <article class="gallery-wrap">
+            <div class="img-big-wrap mainImage" style="text-align: center; background-color: #f1f5f9; border-radius: 12px; padding: 20px; overflow: hidden; border: 1px solid #e2e8f0;">
+              <center> <img src="{{ single_product.images.url }}" style="max-height: 300px; max-width: 100%; object-fit: contain;"> </center>
+            </div> <!-- img-big-wrap.// -->
+          </article> <!-- gallery-wrap .end// -->
+          
+          <ul class="thumb" style="display: flex; list-style: none; padding: 0; margin-top: 15px; gap: 10px;">
+            <li style="margin: 0;">
+              <a href="{{ single_product.images.url }}" target="mainImage" style="display: block; border: 2px solid #cbd5e1; border-radius: 8px; overflow: hidden; width: 60px; height: 60px;"><img src="{{ single_product.images.url }}" alt="Imagen del Curso" style="width: 100%; height: 100%; object-fit: cover;"></a>
+            </li>
+            {% for i in product_gallery %}
+            <li style="margin: 0;">
+              <a href="{{ i.image.url }}" target="mainImage" style="display: block; border: 2px solid #cbd5e1; border-radius: 8px; overflow: hidden; width: 60px; height: 60px;"><img src="{{ i.image.url }}" alt="Imagen del Curso" style="width: 100%; height: 100%; object-fit: cover;"></a>
+            </li>
+            {% endfor %}
+          </ul>
+        </aside>
+
+        <main style="flex: 0 0 50%; max-width: 50%; padding: 30px; border-left: 1px solid #e2e8f0;">
+
+          <form action="{% url 'add_cart' single_product.id %}" method="POST">
+            {% csrf_token %}
+
+            <article class="content-body">
+
+              <h2 style="font-size: 1.6rem; font-weight: 700; color: #0f172a; margin-bottom: 12px;">{{ single_product.product_name }}</h2>
+              
+              <div class="rating-star" style="color: #f59e0b; font-size: 0.9rem; margin-bottom: 15px;">
+                <span>
+                  <i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <span style="color: #64748b; font-size: 0.85rem; margin-left: 5px;">({{ single_product.countReview }} Comentarios)</span>
+                </span>
+              </div>
+
+              <div class="mb-3">
+                <var style="font-size: 1.5rem; font-weight: 700; color: #4f46e5;">$ {{ single_product.price }} USD</var>
+              </div>
+
+              <p style="color: #475569; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">{{ single_product.description }}</p>
+
+              <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+              <!-- Selector de variante genérica (ej. Modalidad / Formato) adaptado para cursos -->
+              {% if single_product.variation_set.colors %}
+              <div style="margin-bottom: 20px;">
+                <div class="item-option-select">
+                  <h6 style="font-size: 0.9rem; font-weight: 600; color: #1e293b; margin-bottom: 8px;">Modalidad / Edición</h6>
+                  <select class="form-control" name="color" required style="border-radius: 8px; border: 1px solid #cbd5e1; padding: 10px; font-size: 0.9rem;">
+                    <option value="" disabled selected>Seleccionar modalidad</option>
+                      {% for i in single_product.variation_set.colors %}
+                      <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+              </div>
+              {% endif %}
+
+              <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+              {% if single_product.stock <= 0 %}
+                <div style="background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; text-align: center;">
+                  Lo lamentamos, este curso no se encuentra disponible actualmente.
+                </div>
+              {% else %}
+                <button type="submit" style="width: 100%; background-color: #4f46e5; color: #fff; border: none; font-weight: 600; padding: 14px; border-radius: 8px; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;" onmouseover="this.style.backgroundColor='#4338ca'" onmouseout="this.style.backgroundColor='#4f46e5'">
+                  <span class="text">Inscribirme al Curso</span> <i class="fas fa-shopping-cart"></i>
+                </button>
+              {% endif %}
+
+            </article> <!-- product-info-aside .// -->
+
+          </form>
+
+        </main> <!-- col.// -->
+      </div> <!-- row.// -->
+    </div> <!-- card.// -->
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+
+    <br>
+
+    <div style="display: flex; flex-wrap: wrap;">
+      <div style="flex: 0 0 100%; max-width: 100%;">
+
+        <!-- Sección de Reseñas / Comentarios -->
+        <div style="background-color: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03);">
+          
+          <form action="{% url 'submit_review' single_product.id %}" method="post">
+            {% csrf_token %}
+            <h5 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 15px;">Escribe tu reseña sobre este curso</h5>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 8px; font-size: 0.9rem;">¿Cómo calificarías este curso?</label>
+              
+              <div class="rate" style="display: inline-block;">
+                  <input type="radio" name="rating" value="5" id="rating10"><label for="rating10" title="5"></label>
+                  <input type="radio" name="rating" value="4.5" id="rating9"><label for="rating9" title="4.5" class="half"></label>
+                  <input type="radio" name="rating" value="4" id="rating8"><label for="rating8" title="4"></label>
+                  <input type="radio" name="rating" value="3.5" id="rating7"><label for="rating7" title="3.5" class="half"></label>
+                  <input type="radio" name="rating" value="3" id="rating6"><label for="rating6" title="3"></label>
+                  <input type="radio" name="rating" value="2.5" id="rating5"><label for="rating5" title="2.5" class="half"></label>
+                  <input type="radio" name="rating" value="2" id="rating4"><label for="rating4" title="2"></label>
+                  <input type="radio" name="rating" value="1.5" id="rating3"><label for="rating3" title="1.5" class="half"></label>
+                  <input type="radio" name="rating" value="1" id="rating2"><label for="rating2" title="1"></label>
+                  <input type="radio" name="rating" value="0.5" id="rating1"><label for="rating1" title="0.5" class="half"></label>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 6px; font-size: 0.9rem;">Título del comentario:</label>
+              <input type="text" class="form-control" name="subject" value="" style="border-radius: 8px; border: 1px solid #cbd5e1; padding: 10px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 6px; font-size: 0.9rem;">Comentario:</label>
+              <textarea name="review" rows="4" class="form-control" placeholder="Escribe aquí tu reseña sobre el contenido del curso..." style="border-radius: 8px; border: 1px solid #cbd5e1; padding: 10px;"></textarea>
+            </div>
+
+            {% if user.is_authenticated %}
+              {% if orderproduct %}
+              <input type="submit" name="" value="Enviar reseña" class="btn btn-primary" style="background-color: #4f46e5; border: none; padding: 10px 20px; font-weight: 600; border-radius: 8px;">
+              {% else %}
+                <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+                  ¡Primero necesitas inscribirte y cursar para escribir una reseña!
+                </div>
+              {% endif %}
+            {% else %}
+              <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+                Para enviar un comentario debes estar registrado. <a href="{% url 'login' %}" style="color: #4f46e5; font-weight: 600; text-decoration: none;">Inicia Sesión</a>
+              </div>
+            {% endif %}
+
+            {% include 'includes/alerts.html' %}
+          </form>
+
+          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+          <header style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0;">Reseñas de estudiantes verificados</h3>
+            <div class="rating-star" style="color: #f59e0b;">
+              <span>
+                <i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                <i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+              </span>
+            </div>
+          </header>
+
+          {% for review in reviews %}
+          <article class="box mb-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+            <div class="icontext w-100">
+              <div class="text">
+                <span class="date text-muted float-md-right" style="font-size: 0.85rem; color: #64748b;">{{ review.updated_at }}</span>
+                <h6 class="mb-1" style="font-weight: 700; color: #0f172a;">{{ review.user.full_name }}</h6>
+                <div class="rating-star" style="color: #f59e0b; font-size: 0.85rem;">
+                  <span>
+                    <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div> <!-- icontext.// -->
+            <div class="mt-3">
+              <h6 style="font-weight: 600; color: #1e293b; font-size: 0.95rem;">{{ review.subject }}</h6>
+              <p style="color: #475569; font-size: 0.9rem; margin-bottom: 0;">
+                {{ review.review }}
+              </p>
+            </div>
+          </article>
+          {% endfor %}
+
+        </div>
+
+      </div> <!-- col.// -->
+    </div> <!-- row.// -->
+
+  </div> <!-- container .//  -->
+</section>
+{% endblock %}

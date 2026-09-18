@@ -1,0 +1,35 @@
+{% load custom_tags %}
+<!-- ========================= FOOTER ========================= -->
+<footer class="section-footer border-top" style="background-color: #0f172a; color: #94a3b8; border-color: #1e293b !important; padding: 25px 0;">
+    <div class="container">
+        <section class="footer-bottom border-top row align-items-center" style="border-color: #1e293b !important; margin: 0; padding-top: 15px;">
+            <div class="col-md-4">
+                <p class="text-muted mb-0" style="color: #94a3b8 !important; font-size: 14px;"> 
+                    &copy; 2026 CursosShop. Todos los derechos reservados.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-center my-2 my-md-0">
+                <span class="px-2" style="font-size: 13px; color: #64748b;">Aprendizaje sin límites</span>
+            </div>
+            <div class="col-md-4 text-md-right text-muted" style="color: #94a3b8 !important;">
+                <i class="fab fa-lg fa-cc-visa" style="margin-left: 8px; color: #cbd5e1;"></i>
+                <i class="fab fa-lg fa-cc-paypal" style="margin-left: 8px; color: #cbd5e1;"></i>
+                <i class="fab fa-lg fa-cc-mastercard" style="margin-left: 8px; color: #cbd5e1;"></i>
+            </div>
+        </section>
+    </div><!-- //container -->
+</footer>
+<!-- ========================= FOOTER END // ========================= -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.thumb a').click(function(e){
+            e.preventDefault();
+            $('.mainImage img').attr('src', $(this).attr('href'));
+        });
+    });
+</script>
+</body>
+</html>
